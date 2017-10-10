@@ -1,0 +1,82 @@
+aside
+{
+    float: left;
+    max-width: 270px;
+    background-color: #101970;
+    color: #eff8ff;
+    min-height: 1450px;
+
+}
+
+main {
+    padding: 1em;
+    overflow: hidden;
+    color: #101970;
+}
+
+ul
+{
+    margin : none;
+}
+
+
+
+h2
+{
+	background-color: #ADD8E6;
+	color: 	#101970;
+	text-align: center;
+}
+h3 
+{
+    min-width: 270px;
+	background-color: #ADD8E6;
+	color: 	#101970;
+	text-align: center;
+}
+
+time
+{
+	color: #101970;
+}
+time
+{
+	text-align: left;
+}
+table
+{
+	width: 100%;
+}
+td p
+{
+	margin-left: 15%;
+	text-align: left;
+}
+
+td{
+	
+	padding: 0px;
+	margin: 0px;
+}
+html, body
+{
+	background-color:  #eff8ff;
+}
+
+
+summary::-webkit-details-marker {
+   display: none
+}
+summary:after {
+   content: "+";
+   color: #ADCA48;
+   float: left;
+   font-size: 1.5em;
+   font-weight: bold;
+   margin: -5px 5px 0 0;
+   
+}
+
+details[open] summary:after {
+   content: "-";
+}
