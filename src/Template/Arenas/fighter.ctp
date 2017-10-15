@@ -12,7 +12,7 @@
                         " Level = ", $hero[0]['level'],
                         " Exp = ", $hero[0]['xp'], 
                         " Sight = ", $hero[0]['skill_sight'],
-                        " Strenght = ", $hero[0]['skill_strenght'],
+                        " Strenght = ", $hero[0]['skill_strength'],
                         " Health max = ", $hero[0]['skill_health'], 
                         " Current Health = ", $hero[0]['current_health'];?></p>
         
