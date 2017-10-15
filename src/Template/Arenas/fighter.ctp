@@ -15,6 +15,9 @@
                         " Strenght = ", $hero[0]['skill_strenght'],
                         " Health max = ", $hero[0]['skill_health'], 
                         " Current Health = ", $hero[0]['current_health'];?></p>
+        
+        <?php echo $this->Html->link(
+            'Editer un Combattant', ['action' => 'edit', $hero[0]['id']]); ?>
     </body>
 </html>
 

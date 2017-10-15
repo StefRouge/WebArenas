@@ -8,6 +8,9 @@ use App\Controller\AppController;
 */
 class ArenasController  extends AppController
 {
+    public $helpers = array('Html', 'Form', 'Flash');
+    public $components = array('Flash');
+    
     public function index()
     {
         //MAIN DE INDEX
@@ -34,6 +37,7 @@ class ArenasController  extends AppController
         $this->loadModel('Fighters');
         $result = $this->Fighters->findHero();
         $this->set('hero',$result);
+        
     }
     public function sight()
     {
@@ -61,5 +65,20 @@ class ArenasController  extends AppController
         {
             changePlayerPosition($result[0]['id'],$result[0]['coordinate_x']-1,$result[0]['coordinate_y']);
         }
+    }
+    public function edit($id = null)
+    {
+        $this->loadModel('Fighters');
+        $fighter = $this->Fighters->get($id);
+        if ($this->request->is(['post', 'put'])) {
+            $this->Fighters->patchEntity($fighter, $this->request->getData());
+            if ($this->Fighters->save($fighter)) {
+                $this->Flash->success(__('Votre combattant a été mis à jour.'));
+                return $this->redirect(['action' => 'fighter']);
+            }
+            $this->Flash->error(__('Impossible de mettre à jour votre combattant.'));
+        }
+
+        $this->set('fighter', $fighter);
     }
 }
