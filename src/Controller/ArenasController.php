@@ -57,14 +57,16 @@ class ArenasController  extends AppController
         
         
     }
-    public function setPlayerPosition()
+    public function setPlayerPosition($id, $coord_x, $coord_y)
     {
         $this->loadModel('Fighters');
-        $result = $this->Fighters->findHero();
-        if($result[0]['coordinate_x']>=0 && $result[0]['coordinate_x']<30 && $result[0]['coordinate_y']>=0 && $result[0]['coordinate_y']<30)
+        if($coord_x>=0 && $coord_x<30 && $coord_y>=0 && $coord_y<30)
         {
-            changePlayerPosition($result[0]['id'],$result[0]['coordinate_x']-1,$result[0]['coordinate_y']);
+            $this->Fighters->changePlayerPosition($id,$coord_x,$coord_y);
+            return $this->redirect(['action' => 'fighter']);
         }
+        $this->Flash->error(__('Impossible de mettre à jour votre combattant.'));
+        return $this->redirect(['action' => 'fighter']);
     }
     public function edit($id = null)
     {
