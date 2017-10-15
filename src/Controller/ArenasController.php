@@ -63,10 +63,10 @@ class ArenasController  extends AppController
         if($coord_x>=0 && $coord_x<30 && $coord_y>=0 && $coord_y<30)
         {
             $this->Fighters->changePlayerPosition($id,$coord_x,$coord_y);
-            return $this->redirect(['action' => 'fighter']);
+            return $this->redirect(['action' => 'sight']);
         }
-        $this->Flash->error(__('Impossible de mettre à jour votre combattant.'));
-        return $this->redirect(['action' => 'fighter']);
+        $this->Flash->error(__('Impossible de déplacer votre combattant.'));
+        return $this->redirect(['action' => 'sight']);
     }
     public function edit($id = null)
     {

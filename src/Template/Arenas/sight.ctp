@@ -44,5 +44,9 @@
             ?>
             
         </table>
+        <?php echo $this->Form->postButton('haut', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']),$hero[0]['coordinate_y']-1]);
+        echo $this->Form->postButton('bas', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']),$hero[0]['coordinate_y']+1]);
+        echo $this->Form->postButton('gauche', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']-1),$hero[0]['coordinate_y']]);
+        echo $this->Form->postButton('droite', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']+1),$hero[0]['coordinate_y']]) ?>
     </body>
 </html>

@@ -18,10 +18,6 @@
         
         <?php echo $this->Html->link(
             'Editer un Combattant', ['action' => 'edit', $hero[0]['id']]); ?>
-        <?= $this->Form->postButton('haut', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']-1),$hero[0]['coordinate_y']]) ?>
-        <?= $this->Form->postButton('bas', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']+1),$hero[0]['coordinate_y']]) ?>
-        <?= $this->Form->postButton('gauche', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']),$hero[0]['coordinate_y']-1]) ?>
-        <?= $this->Form->postButton('droite', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']-1),$hero[0]['coordinate_y']+1]) ?>
     </body>
 </html>
 
