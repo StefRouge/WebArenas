@@ -41,10 +41,36 @@ class FightersTable extends Table
         $fighter->level = 1;
         
         list ($lig, $col) = $this->getMaxSize();
-        
-		
-        $fighter->coordinate_x = rand(1,$col);
-        $fighter->coordinate_y = rand(1,$lig);
+        list ($pos_x, $pos_y) = $this->getPositionFighters();//$id);
+        $end=false;
+		$t=0;
+        $l=0;
+        $x=0;
+        $y=0;
+        while(!$end)
+        {
+            $x=rand(0,$col-1);
+            $y=rand(0,$lig-1);
+            $end=true;
+            foreach($pos_y as $py)
+            {
+                foreach($pos_x as $px)
+                { 
+                    if($l == $t)
+                    {
+                        if($x == $px->coordinate_x && $y == $py->coordinate_y)
+                        {
+                             $end = false;
+                        }
+                    }
+                    $l += 1;
+                }
+                $l=0;
+                $t += 1;
+            }
+        }
+        $fighter->coordinate_x = $x;
+        $fighter->coordinate_y = $y;
         
         return $fightersTable->save($fighter);
     }
@@ -77,11 +103,11 @@ class FightersTable extends Table
 		return $x;
 	}
     
-    public function getPositionFighters($id)
+    public function getPositionFighters()//$id)
     {
         $fighters = TableRegistry::get('fighters');
-        $query_x = $fighters->find("all")->select(['coordinate_x'])->where(['id !=' => $id]);
-        $query_y = $fighters->find("all")->select(['coordinate_y'])->where(['id !=' => $id]);
+        $query_x = $fighters->find("all")->select(['coordinate_x']);//->where(['id !=' => $id]);
+        $query_y = $fighters->find("all")->select(['coordinate_y']);//->where(['id !=' => $id]);
         $result_y = $query_y->all()->toArray();
         $result_x = $query_x->all()->toArray();
         return array($result_x,$result_y);

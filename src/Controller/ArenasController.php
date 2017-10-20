@@ -57,7 +57,7 @@ class ArenasController  extends AppController
         $result = $this->Fighters->get($id);
         
         //Récupérer les coordonnées des autres fighters
-        list ($pos_x, $pos_y) = $this->Fighters->getPositionFighters($id);
+        list ($pos_x, $pos_y) = $this->Fighters->getPositionFighters();//$id);
         $this->set('pos_x',$pos_x);
         $this->set('pos_y',$pos_y);
         //Récupérer la taille de la grille
@@ -170,13 +170,44 @@ class ArenasController  extends AppController
         
         return $this->redirect(['action' => 'fighter']);
     }
-	
+	public function isPositionAllowed($coord_x, $coord_y)
+    {
+        $id = 1;
+        $this->loadModel('Fighters');
+        $result = $this->Fighters->get($id);
+        list ($pos_x, $pos_y) = $this->Fighters->getPositionFighters();//$id);
+		$t=0;
+        $l=0;
+
+        $end=true;
+        foreach($pos_y as $py)
+        {
+            foreach($pos_x as $px)
+            { 
+                if($l == $t)
+                {
+                    if($coord_x != $result->coordinate_x || $coord_y != $result->coordinate_y)
+                    {
+                         if($coord_x == $px->coordinate_x && $coord_y == $py->coordinate_y)
+                        {
+                             return false;
+                        }
+                    }
+                   
+                }
+                $l += 1;
+            }
+            $l=0;
+            $t += 1;
+        }
+        return true;
+    }
     public function setPlayerPosition($id, $coord_x, $coord_y)
     {
         $this->loadModel('Fighters');
         
         //Vérifier que le combattant est dans la grille
-        if($coord_x>=0 && $coord_x<15 && $coord_y>=0 && $coord_y<10)
+        if($coord_x>=0 && $coord_x<15 && $coord_y>=0 && $coord_y<10 && $this->isPositionAllowed($coord_x, $coord_y))
         {
             //Changer la positoin du joueur
             $this->Fighters->changePlayerPosition($id,$coord_x,$coord_y);
