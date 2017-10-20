@@ -34,7 +34,7 @@ class ArenasController  extends AppController
 			$result = [];
 		}
         
-		if(!result)
+		if(!$result)
 		{
 			return $this->redirect(['action' => 'add']);
 		}
@@ -56,6 +56,10 @@ class ArenasController  extends AppController
         $this->loadModel('Fighters');
         $result = $this->Fighters->get($id);
         
+        //Récupérer les coordonnées des autres fighters
+        list ($pos_x, $pos_y) = $this->Fighters->getPositionFighters($id);
+        $this->set('pos_x',$pos_x);
+        $this->set('pos_y',$pos_y);
         //Récupérer la taille de la grille
         list ($lig, $col) = $this->Fighters->getMaxSize();
         

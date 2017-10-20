@@ -9,7 +9,7 @@
         var page = document.getElementById("sight");
         page.className="active";
     </script>
-    <table>
+    <table class="table">
             <?php   
                     for($i=0; $i<$lig;$i++)
                     {
@@ -17,15 +17,41 @@
                         for($j=0;$j<$col;$j++)
                         {
                             echo('<td>');
+                            
                             if(abs($fighter->coordinate_x-$j)+abs($fighter->coordinate_y-$i)>$fighter->skill_sight)
                             {
                                 echo 'x';
                             }
-                            // Dans le brouillard de guerre
+                            // A l'intérieur du champ de vision
                             if(abs($fighter->coordinate_x-$j)+abs($fighter->coordinate_y-$i)<=$fighter->skill_sight
                                &&!($j==$fighter->coordinate_x&&$i==$fighter->coordinate_y))
                             {
-                                echo '_';
+                                
+                                $t=0;
+                                $l=0;
+                                foreach($pos_y as $y)
+                                {
+
+                                    foreach($pos_x as $x)
+                                    { 
+
+                                        if($l == $t)
+                                        {
+                                            if($j == $x->coordinate_x && $i == $y->coordinate_y)
+                                            {
+                                                echo 'B';
+                                            }
+                                            else
+                                            {
+                                                echo '_';
+                                            }
+                                        }
+                                        $l += 1;
+
+                                    }
+                                    $l=0;
+                                    $t += 1;
+                                }
                             }
                             if($j==$fighter->coordinate_x&&$i==$fighter->coordinate_y) //perso
                             {

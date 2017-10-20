@@ -76,6 +76,17 @@ class FightersTable extends Table
 		$x = $fighter->toArray();
 		return $x;
 	}
+    
+    public function getPositionFighters($id)
+    {
+        $fighters = TableRegistry::get('fighters');
+        $query_x = $fighters->find("all")->select(['coordinate_x'])->where(['id !=' => $id]);
+        $query_y = $fighters->find("all")->select(['coordinate_y'])->where(['id !=' => $id]);
+        $result_y = $query_y->all()->toArray();
+        $result_x = $query_x->all()->toArray();
+        return array($result_x,$result_y);
+    }
+    
     public function getMaxSize()
     {
         $lig = 10;
