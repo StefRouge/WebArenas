@@ -46,6 +46,7 @@ class ArenasController  extends AppController
 
 			$this->set('fighter',$result);
 			$this->set('img',$img[0]);  
+			$this->set('visibility',"visible");
 		}
      
     }

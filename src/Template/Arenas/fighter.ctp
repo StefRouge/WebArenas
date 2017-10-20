@@ -37,7 +37,7 @@
         <br>
         <?php endforeach;?>
         
-        <?= $this->Form->postButton('level up', ['action' => 'setFighterLevel',$fighter[0]->id]);?>	
+        <?= $this->Form->postButton('level up', ['action' => 'setFighterLevel',$fighter[0]->id],["style"=>"visibility :".$visibility]);?>	
         <?= $this->Form->postButton('logo 1', ['action' => 'changeLogo',1]);?>	
         <?= $this->Form->postButton('logo 2', ['action' => 'changeLogo',2]);?>	
     </section>

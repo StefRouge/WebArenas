@@ -38,7 +38,7 @@ class FightersTable extends Table
         $fighter->skill_health = 5;
         $fighter->current_health = $fighter['skill_health'];
         $fighter->xp = 0;
-        $fighter->level = 1;
+        $fighter->level = 0;
         
         list ($lig, $col) = $this->getMaxSize();
         list ($pos_x, $pos_y) = $this->getPositionFighters();//$id);
