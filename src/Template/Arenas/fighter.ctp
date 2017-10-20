@@ -32,12 +32,14 @@
             <p> Health : <?= $f->current_health?> / <?= $f->skill_health?></p>
         </div>
 		<div class="row">
+            <?= $this->Form->postButton('level up', ['action' => 'setFighterLevel',$f->id],["style"=>"visibility :".$visibility]);?>
+        </div>
+		<div class="row">
             <?= $this->Form->postButton('delete', ['action' => 'deleteFighter',$f->id]);?>
         </div>
         <br>
         <?php endforeach;?>
-        
-        <?= $this->Form->postButton('level up', ['action' => 'setFighterLevel',$fighter[0]->id],["style"=>"visibility :".$visibility]);?>	
+        	
         <?= $this->Form->postButton('logo 1', ['action' => 'changeLogo',1]);?>	
         <?= $this->Form->postButton('logo 2', ['action' => 'changeLogo',2]);?>	
     </section>
