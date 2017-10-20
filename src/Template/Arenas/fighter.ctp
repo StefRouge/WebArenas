@@ -31,6 +31,9 @@
         <div class="row">
             <p> Health : <?= $f->current_health?> / <?= $f->skill_health?></p>
         </div>
+		<div class="row">
+            <?= $this->Form->postButton('delete', ['action' => 'deleteFighter',$f->id]);?>
+        </div>
         <br>
         <?php endforeach;?>
         

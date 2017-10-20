@@ -222,4 +222,11 @@ class ArenasController  extends AppController
         $this->Events->saveEvent($x, $y, "Je suis un event");
         return $this->redirect(['action' => 'sight']);
     }
+	public function deleteFighter ($id)
+	{
+		$this->loadModel('Fighters');
+		$fighter = $this->Fighters->get($id);
+		$result = $this->Fighters->delete($fighter);
+		return $this->redirect(['action' => 'fighter']);
+	}
 }
