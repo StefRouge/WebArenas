@@ -1,39 +1,33 @@
-<!DOCTYPE HTML>
-
-<html lang="en"> 
-	
-	<head> 
-        <script src="script.js"></script>
-		<title>My Resumee</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8">
-		<link rel="stylesheet" href="CV.css">
-	</head> 
-	
-	<body>
-        <!--<button action = setPlayerPosition(,$pos_,$pos_y+1)> </button>-->
-        <?php
-        /*echo $form->create($hero[0]);
-        echo $form->hidden('id');
-        echo $form->end('Haut');*/
-        ?>
-        <table>
+<?php $this->assign('title','Sight');?>
+<!DOCTYPE html>
+<html>
+<head>
+    
+</head>
+<body>
+    <script type="text/javascript">
+        var page = document.getElementById("sight");
+        page.className="active";
+    </script>
+    <table>
             <?php   
-                    for($i=0; $i<20;$i++)
+                    for($i=0; $i<$lig;$i++)
                     {
                         echo('<tr>');
-                        for($j=0;$j<30;$j++)
+                        for($j=0;$j<$col;$j++)
                         {
                             echo('<td>');
-                            if(abs($pos_x-$j)+abs($pos_y-$i)>$vision) 
+                            if(abs($fighter->coordinate_x-$j)+abs($fighter->coordinate_y-$i)>$fighter->skill_sight)
                             {
                                 echo 'x';
                             }
-                            if(abs($pos_x-$j)+abs($pos_y-$i)<=$vision
-                               &&!($j==$pos_x&&$i==$pos_y))
+                            // Dans le brouillard de guerre
+                            if(abs($fighter->coordinate_x-$j)+abs($fighter->coordinate_y-$i)<=$fighter->skill_sight
+                               &&!($j==$fighter->coordinate_x&&$i==$fighter->coordinate_y))
                             {
                                 echo '_';
                             }
-                            if($j==$pos_x&&$i==$pos_y) //perso
+                            if($j==$fighter->coordinate_x&&$i==$fighter->coordinate_y) //perso
                             {
                                 echo 'A';
                             }
@@ -44,9 +38,9 @@
             ?>
             
         </table>
-        <?php echo $this->Form->postButton('haut', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']),$hero[0]['coordinate_y']-1]);
-        echo $this->Form->postButton('bas', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']),$hero[0]['coordinate_y']+1]);
-        echo $this->Form->postButton('gauche', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']-1),$hero[0]['coordinate_y']]);
-        echo $this->Form->postButton('droite', ['action' => 'setPlayerPosition',$hero[0]['id'],($hero[0]['coordinate_x']+1),$hero[0]['coordinate_y']]) ?>
-    </body>
-</html>
+        <?php echo $this->Form->postButton('haut', ['action' => 'setPlayerPosition',$fighter->id,$fighter->coordinate_x,($fighter->coordinate_y-1)]);
+        echo $this->Form->postButton('bas', ['action' => 'setPlayerPosition',$fighter->id,$fighter->coordinate_x,($fighter->coordinate_y+1)]);
+        echo $this->Form->postButton('gauche', ['action' => 'setPlayerPosition',$fighter->id,($fighter->coordinate_x-1),$fighter->coordinate_y]);
+        echo $this->Form->postButton('droite', ['action' => 'setPlayerPosition',$fighter->id,($fighter->coordinate_x+1),$fighter->coordinate_y]);
+        echo $this->Form->postButton('add event', ['action' => 'addEvent',$fighter->coordinate_x,$fighter->coordinate_y]); ?>
+</body>

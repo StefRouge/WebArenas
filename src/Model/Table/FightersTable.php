@@ -3,36 +3,51 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\Validation\Validator;
+
 class FightersTable extends Table
 {
+    /*
+    public function getBestFighter()
+    {
+        $bestFighter = $this->find('all', [
+                'order' => ['Fighters.level' =>'DESC']
+            ])->first();
+        return $bestFighter;
+    }
+    
     function findHero()
     {
         $fighters = TableRegistry::get('fighters');
-        $y = $fighters->find("all")->where(['name' => 'Aragorn']);
+        $y = $fighters->find("all")->where(['id' => '1']);
         $z = $y->all();
         $x = $z->toArray();
         return $x;
     }
-    
-    function bestFighters()
+    */
+    public function saveFighter($name, $player_id)
     {
-        $fighters = TableRegistry::get('fighters');
-        //$query = $fighters->find();
+        $fightersTable = TableRegistry::get('fighters');
+        $fighter = $fightersTable->newEntity();
         
-        //$max =  $query->select(['fighters__top' => $query->func()->max('fighters.level')]);
-        //return $fighters->find("all")->where(['fighters.skill_sight ' => 2]);
-        //return $fighters->find("all")->where(['fighters.level' => $max]);
-        return $fighters->find("all")->select("fighters.name")->order(['fighters.level' => 'DESC'])->first();
+        //Réinitialiser le combattant
+        $fighter->name = $name;
+        $fighter->player_id = $player_id;
+        $fighter->skill_sight = 2;
+        $fighter->skill_strength = 1;
+        $fighter->skill_health = 5;
+        $fighter->current_health = $fighter['skill_health'];
+        $fighter->xp = 0;
+        $fighter->level = 1;
+        
+        list ($lig, $col) = $this->getMaxSize();
+        
+		
+        $fighter->coordinate_x = rand(1,$col);
+        $fighter->coordinate_y = rand(1,$lig);
+        
+        return $fightersTable->save($fighter);
     }
-    
-    public function changeFighterLevel($id)
-	{
-		$fightersTable = TableRegistry::get('fighters');
-		$fighters = $fightersTable->get($id);
-		$fighters->level +=1;
-		$fightersTable->save($fighters);
-        
-	}
     
     public function changePlayerPosition($id, $positionX,$positionY)
 	{
@@ -44,32 +59,27 @@ class FightersTable extends Table
 		$fightersTable->save($fighters);
         
 	}
-    /*
-    public function changeFighterSight($id)
+    
+    public function changeFighterLevel($id)
 	{
 		$fightersTable = TableRegistry::get('fighters');
 		$fighters = $fightersTable->get($id);
 		$fighters->level +=1;
 		$fightersTable->save($fighters);
 	}
-    public function changeFighterHealt($id)
-	{
-		$fightersTable = TableRegistry::get('fighters');
-		$fighters = $fightersTable->get($id);
-		$fighters->level +=1;
-		$fightersTable->save($fighters);
-	}
-    public function changeFighterStrenght($id)
-	{
-		$fightersTable = TableRegistry::get('fighters');
-		$fighters = $fightersTable->get($id);
-		$fighters->level +=1;
-		$fightersTable->save($fighters);
-	}*/
+    
     public function getFighterById($id)
 	{
 		$fightersTable = TableRegistry::get('fighters');
-		$fighter = $fightersTable->get($id);
-		return $fighter;
+		$fighters = $fightersTable->find("all")->where(['player_id' => $id]);
+		$fighter = $fighters->all();
+		$x = $fighter->toArray();
+		return $x;
 	}
+    public function getMaxSize()
+    {
+        $lig = 10;
+        $col = 15;
+        return array($lig,$col);
+    }
 }

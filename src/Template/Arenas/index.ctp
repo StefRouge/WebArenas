@@ -1,13 +1,14 @@
-<!DOCTYPE HTML>
+<?php $this->assign('title','Index');?>
+<!DOCTYPE html>
+<html>
+<head>
+    
+</head>
+<body>
+    <script type="text/javascript">
+        var page = document.getElementById("index");
+        page.className="active";
+    </script>
+    
+</body>
 
-<html lang="en"> 
-	
-	<head> 
-        
-	</head> 
-	
-	<body> 
-       <p> <?php echo $x->name;?> attaque éclair</p>
-    </body>
-	
-</html>

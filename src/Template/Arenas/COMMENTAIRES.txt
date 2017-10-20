@@ -1,2 +1,11 @@
 <?php pr($x->toArray());?> 
 <?php echo $x;?> 
+
+
+
+
+avatar sur fighter : dossier images lol à choisir lors de création (radio button)
+
+
+parametres dans fighter : function ligcol return vals, dans le controller : set->...ligcol, 
+dans la vue de pas oublier de recup le tt

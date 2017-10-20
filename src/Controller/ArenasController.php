@@ -1,6 +1,10 @@
 <?php
 namespace App\Controller;
 use App\Controller\AppController;
+use App\Model\Table\FightersTable;
+use App\Model\Table\EventsTable;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 /**
 * Personal Controller
 * User personal interface
@@ -8,79 +12,179 @@ use App\Controller\AppController;
 */
 class ArenasController  extends AppController
 {
-    public $helpers = array('Html', 'Form', 'Flash');
-    public $components = array('Flash');
-    
     public function index()
     {
-        //MAIN DE INDEX
-        
-        $this->loadModel('Fighters');
-        //$figterlist=$this->Fighters->find('all');
-        //pr($figterlist->toArray());
-        
-        $result = $this->Fighters->bestFighters();
-        $this->set('x',$result);
-        
-        //END OF MAIN
     }
-    public function diary()
-    {
-
-    }
-    public function login()
-    {
-
-    }
+    
     public function fighter()
     {
+		$id ='545f827c-576c-4dc5-ab6d-27c33186dc3e';
         $this->loadModel('Fighters');
-        $result = $this->Fighters->findHero();
-        $this->set('hero',$result);
+		$dir = new Folder(WWW_ROOT . 'img');
+		$img = $dir->find($id.'.jpg', true);		
+		$path = $dir->path;
+		
+				
+		try
+		{
+			$result = $this->Fighters->getFighterById($id);
+		}
+        catch(RecordNotFoundException $e)
+		{
+			$result = [];
+		}
         
+		if(!result)
+		{
+			return $this->redirect(['action' => 'add']);
+		}
+		else
+		{
+			//En cas de mort ajouter un nouveau combattant
+			if($result[0]->current_health == 0)
+				return $this->redirect(['action' => 'add',$result[0]->id]);
+
+			$this->set('fighter',$result);
+			$this->set('img',$img[0]);  
+		}
+     
     }
+    
     public function sight()
     {
+		$id = 1;
         $this->loadModel('Fighters');
-        $result = $this->Fighters->findHero();
-        $this->set('hero',$result);
+        $result = $this->Fighters->get($id);
         
-        $this->set('vision',$result[0]['skill_sight']);
-        $this->set('pos_x',$result[0]['coordinate_x']);
-        $this->set('pos_y',$result[0]['coordinate_y']);
-        $this->set('id',$result[0]['id']);
-        /*
-        if($result[0]['coordinate_x']>=0 && $result[0]['coordinate_x']<30 && $result[0]['coordinate_y']>=0 && $result[0]['coordinate_y']<30)
+        //Récupérer la taille de la grille
+        list ($lig, $col) = $this->Fighters->getMaxSize();
+        
+        $this->set('fighter',$result);
+        $this->set('lig',$lig);
+        $this->set('col',$col);
+    }
+    
+    public function login()
+    {
+    }
+    
+    public function diary()
+    {
+        $this->loadModel('Events');
+        $this->set('diary',$this->Events->getEvent());
+    }
+    
+    public function edit($id = null)
+    {
+        $this->loadModel('Fighters');
+        $fighter = $this->Fighters->get($id);
+        $this->set('fighter', $fighter);
+        
+        // Vérification de la méthode (POST ou PUT)
+        if ($this->request->is(['post', 'put'])) {
+            
+            //Récupération des données
+            $result = $this->request->getData();
+            
+            //On ne peut augmenter qu'une compétance
+            if($result['skill_sight'] + $result['skill_strength'] + $result['skill_health'] == 1)
+            {
+                //Ajout de la compétance au combattant
+                $fighter['skill_sight'] += $result['skill_sight'];
+                $fighter['skill_strength'] += $result['skill_strength'];
+                $fighter['skill_health'] += 3*$result['skill_health'];
+                
+                //Redonner de la vie si la vie augmente
+                if($result['skill_health'] == 1)
+                {
+                    $fighter['current_health'] = $fighter['skill_health'];
+                }
+                
+                //Sauvegarder les changements en base de données
+                if ($this->Fighters->save($fighter)) {
+                    
+                    $this->Flash->success(__('Votre combattant a été mis à jour.'));
+                    
+                    //Redirection vers la page d'info du combattant
+                    return $this->redirect(['action' => 'fighter']);
+                }
+                $this->Flash->error(__('Impossible de mettre à jour votre combattant.'));
+            }
+            $this->Flash->error(__('Veuillez selectionner un seul champ'));
+            
+        }
+    }
+    
+    public function add($id = null)
+    {
+		$id ='545f827c-576c-4dc5-ab6d-27c33186dc3e';
+        $this->loadModel('Fighters');
+        
+        //$fighter = $this->Fighters->get($id);
+        //$this->set('fighter', $fighter);
+        
+        // Vérification de la méthode (POST ou PUT)
+        if ($this->request->is(['post', 'put'])) 
         {
-            if($this->Fighters->changePlayerPosition($result[0]['id'],$result[0]['coordinate_x']-1,$result[0]['coordinate_y']));
-        }*/
+            //Récupération des données
+            $result = $this->request->getData();
+			
+   
+            //Sauvegarder les changements en base de données
+            if ($this->Fighters->saveFighter($result['name'],$id))
+            { 
+                $this->Flash->success(__('Votre combattant a été mis à jour.'));
+                
+                //Redirection vers la page d'info du combattant
+                return $this->redirect(['action' => 'fighter']);
+            }
+            $this->Flash->error(__('Impossible de mettre à jour votre combattant.'));
+        }
+    }
+    
+    public function setFighterLevel($id)
+    {
+        $this->loadModel('Fighters');
         
+        //Ajout du niveau
+        $this->Fighters->changeFighterLevel($id);
+        
+        //Redirection vers la page d'ajout de compétances
+        $this->redirect(['action' => 'edit',$id]);
         
     }
+	
+    public function changeLogo($num)
+    {
+		//Récupérer l'Id de l'utilisateur
+		$id ='545f827c-576c-4dc5-ab6d-27c33186dc3e';
+		
+		//Copier le logo choisi et changer le nom
+		$dir = new Folder(WWW_ROOT . 'img');
+		$path = $dir->path;
+		copy($path.'\\Logo'.$num.'.jpg',$path.'\\'. $id.'.jpg');
+        
+        return $this->redirect(['action' => 'fighter']);
+    }
+	
     public function setPlayerPosition($id, $coord_x, $coord_y)
     {
         $this->loadModel('Fighters');
-        if($coord_x>=0 && $coord_x<30 && $coord_y>=0 && $coord_y<30)
+        
+        //Vérifier que le combattant est dans la grille
+        if($coord_x>=0 && $coord_x<15 && $coord_y>=0 && $coord_y<10)
         {
+            //Changer la positoin du joueur
             $this->Fighters->changePlayerPosition($id,$coord_x,$coord_y);
             return $this->redirect(['action' => 'sight']);
         }
         $this->Flash->error(__('Impossible de déplacer votre combattant.'));
         return $this->redirect(['action' => 'sight']);
     }
-    public function edit($id = null)
+    public function addEvent ($x,$y)
     {
-        $this->loadModel('Fighters');
-        $fighter = $this->Fighters->get($id);
-        if ($this->request->is(['post', 'put'])) {
-            $this->Fighters->patchEntity($fighter, $this->request->getData());
-            if ($this->Fighters->save($fighter)) {
-                $this->Flash->success(__('Votre combattant a été mis à jour.'));
-                return $this->redirect(['action' => 'fighter']);
-            }
-            $this->Flash->error(__('Impossible de mettre à jour votre combattant.'));
-        }
-
-        $this->set('fighter', $fighter);
+        $this->loadModel('Events');
+        $this->Events->saveEvent($x, $y, "Je suis un event");
+        return $this->redirect(['action' => 'sight']);
     }
 }

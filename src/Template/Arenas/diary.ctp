@@ -1,15 +1,33 @@
-<!DOCTYPE HTML>
-
-<html lang="en"> 
-	
-	<head> 
-        <script src="script.js"></script>
-		<title>My Resumee</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8">
-		<link rel="stylesheet" href="CV.css">
-	</head> 
-	
-	<body> 
-        <p>diary</p>
-    </body>
-</html>
+<?php $this->assign('title','Diary');?>
+<!DOCTYPE html>
+<html>
+<head>
+    
+</head>
+<body>
+    <script type="text/javascript">
+        var page = document.getElementById("diary");
+        page.className="active";
+    </script>
+    <section class="container-fluid">
+        
+        <?php foreach ($diary as $d): ?>
+            <div class="row">
+            <?= $d->name;?>
+            </div>
+ 
+            <div class="row">
+                Coord : x = <?= $d->coordinate_x;?> ; y = <?= $d->coordinate_y;?>
+            </div>
+        
+            <div class="row">
+            <?= $d->date;?>
+            </div>
+        
+            <br/>
+        
+        <?php endforeach;?>
+        
+    </section>
+        
+</body>
